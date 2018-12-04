@@ -4,6 +4,7 @@ export class AsyncAction extends Action {
         super(scheduler, work);
         this.scheduler = scheduler;
         this.work = work;
+        debugger
         this.pending = false;
     }
     schedule(state, delay = 0) {

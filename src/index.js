@@ -1,18 +1,20 @@
-import { range, interval, fromEvent, pipe } from './esm2015';
-import { map, filter, throttleTime } from './esm2015/operators';
+import { fromEvent } from './esm2015';
+import { throttleTime, scan, mapTo} from './esm2015/operators'
+import { isInteropObservable } from './esm2015/internal/util/isInteropObservable';
 
 const addBtn = document.getElementById('add')
 const minusBtn = document.getElementById('minus')
-const incomeLabel = document.getElementById('incomeLabel')
-const nameInput = document.getElementById('name');
+const nameInput = document.getElementById('name')
+let addFromEventObj = fromEvent(addBtn, 'click')
+addFromEventObj = addFromEventObj.pipe(throttleTime(1000 * 2),mapTo(1), scan((init, next) => init + next, 0))
+addFromEventObj = addFromEventObj.subscribe((value) => {
+    nameInput.value = value
+})
+console.log(addFromEventObj)
+// const minusFromEventObj = fromEvent(minusBtn, 'click')
 
-// const intervalHander = interval(1000 * 2)
-//     .pipe(filter(x => x % 2 === 1), map(x => x + x))
-//     .subscribe(x => nameInput.value = x);
-
-const fromE = fromEvent(addBtn, 'click')
-    // .pipe(throttleTime(1000))
-    .subscribe(() => {
-        console.log(11111111111)
-        nameInput.value = +(nameInput.value) + 1
-    })
+// minusFromEventObj
+//     .pipe(throttleTime(1000 * 3))
+//     .subscribe(() => {
+//         nameInput.value = +(nameInput.value) - 1
+//     })

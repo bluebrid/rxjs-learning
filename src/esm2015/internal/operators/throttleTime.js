@@ -2,7 +2,9 @@ import { Subscriber } from '../Subscriber';
 import { async } from '../scheduler/async';
 import { defaultThrottleConfig } from './throttle';
 export function throttleTime(duration, scheduler = async, config = defaultThrottleConfig) {
-    return (source) => source.lift(new ThrottleTimeOperator(duration, scheduler, config.leading, config.trailing));
+    return (source) => {
+        return source.lift(new ThrottleTimeOperator(duration, scheduler, config.leading, config.trailing));
+    }
 }
 class ThrottleTimeOperator {
     constructor(duration, scheduler, leading, trailing) {
@@ -33,7 +35,8 @@ class ThrottleTimeSubscriber extends Subscriber {
             }
         }
         else {
-            this.add(this.throttled = this.scheduler.schedule(dispatchNext, this.duration, { subscriber: this }));
+            this.throttled = this.scheduler.schedule(dispatchNext, this.duration, { subscriber: this })
+            this.add(this.throttled);
             if (this.leading) {
                 this.destination.next(value);
             }

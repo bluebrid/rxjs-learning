@@ -12,7 +12,6 @@ export function fromEvent(target, eventName, options, resultSelector) {
         return fromEvent(target, eventName, options).pipe(map(args => isArray(args) ? resultSelector(...args) : resultSelector(args)));
     }
     return new Observable(subscriber => {
-        debugger
         function handler(e) {
             if (arguments.length > 1) {
                 subscriber.next(Array.prototype.slice.call(arguments));
@@ -28,7 +27,6 @@ function setupSubscription(sourceObj, eventName, handler, subscriber, options) {
     let unsubscribe;
     if (isEventTarget(sourceObj)) {
         const source = sourceObj;
-        debugger
         sourceObj.addEventListener(eventName, handler, options);
         unsubscribe = () => source.removeEventListener(eventName, handler, options);
     }

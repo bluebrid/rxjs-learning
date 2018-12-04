@@ -24,9 +24,12 @@ export class Observable {
             operator.call(sink, this.source);
         }
         else {
-            sink.add(this.source || (config.useDeprecatedSynchronousErrorHandling && !sink.syncErrorThrowable) ?
+            sink.add(
+                this.source || 
+                (config.useDeprecatedSynchronousErrorHandling && !sink.syncErrorThrowable) ?
                 this._subscribe(sink) :
-                this._trySubscribe(sink));
+                this._trySubscribe(sink)
+            );
         }
         if (config.useDeprecatedSynchronousErrorHandling) {
             if (sink.syncErrorThrowable) {
@@ -84,7 +87,9 @@ export class Observable {
         if (operations.length === 0) {
             return this;
         }
-        return pipeFromArray(operations)(this);
+        var opts = pipeFromArray(operations);
+        var result = opts(this);
+         return result;
     }
     toPromise(promiseCtor) {
         promiseCtor = getPromiseCtor(promiseCtor);

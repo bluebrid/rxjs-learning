@@ -116,6 +116,7 @@ export class SafeSubscriber extends Subscriber {
             }
         }
         this._context = context;
+        //将observerOrNext 保存在_next 中，也就是subscribe 的第一个
         this._next = next;
         this._error = error;
         this._complete = complete;
@@ -184,6 +185,7 @@ export class SafeSubscriber extends Subscriber {
         }
     }
     __tryOrUnsub(fn, value) {
+        // debugger
         try {
             fn.call(this._context, value);
         }
